@@ -3,15 +3,17 @@ let score = 0
 let playing = false
 let game = 0
 //HOME
-
+let isHome=true
+let sparkle=[]
 
 //PATIENCE
 let type="NA"
-let marketDone=0
+let marketPlaying=0
 let timeElapsed=0
 let win="no"
 
 function preload(){
+HomePic=loadImage("/Images/Fireflies.png")
 Calistoga=loadImage("background.png")
 Orch1=loadImage("/Images/Orchid1.png")
 Orch2=loadImage("/Images/Orchid2.png")
@@ -22,17 +24,30 @@ Wist3=loadImage("/Images/Wisteria3.png")
 Snap1=loadImage("/Images/Snap1.png")
 Snap2=loadImage("/Images/Snap2.png")
 Snap3=loadImage("/Images/Snap3.png")
+Spark1=loadImage("/Images/Sparkler1.png")
+Spark2=loadImage("/Images/Sparkler2.png")
+Spark3=loadImage("/Images/Sparkler3.png")
 }
 
 function setup() {
   createCanvas(600, 400);
+  sparkle=[Spark1,Spark2,Spark3]
 }
 
 function draw() {
-  background(0);
-  if(marketDone==0){
-     market()
+  console.log(type)
+//HOME
+  if(isHome==true){
+     home()
      }
+//PATIENCE
+          if(mouseIsPressed&&mouseX<525&&mouseX>400&&mouseY>45&&mouseY<145){
+    marketPlaying=1
+    isHome=false
+     }
+  if(marketPlaying==1){
+    market()
+  }
   if(type!="NA"){
     growing()
   }
@@ -44,66 +59,66 @@ function market(){
   filter(BLUR,1000000)
   background(Calistoga)
   filter(BLUR,0)
+  isHome=false
   if(type=="NA"){
     fill(255)
     textSize(32)
-    rectMode(CENTER)
-    text("pick a flower!",width/2,100)
-    circle(200,height/2,100)
-    circle(300,height/2,100)
-    circle(400,height/2,100)
+    textAlign(CENTER)
+    text("pick a flower!",width/2,300)
+    image(Orch1,-100,-145,600,400)
+    image(Wist1,0,-145,600,400)
+    image(Snap1,100,-145,600,400)
   }
     if(mouseIsPressed&&dist(200,200,mouseX,mouseY)<=50){
       type="Orchid"
-      marketDone=1
+      marketPlaying=0
     }
     if(mouseIsPressed&&dist(300,200,mouseX,mouseY)<=50){
       type="Wisteria"
-      marketDone=1
+      marketPlaying=0
     }
     if(mouseIsPressed&&dist(400,200,mouseX,mouseY)<=50){
       type="Snapdragon"
-      marketDone=1
+      marketPlaying=0
     }
   }
 
 function growing(){
   background(Calistoga)
+  timeElapsed+=deltaTime/10
   if(type=="Orchid"){
-      if(timeElapsed<=10&&timeElapsed>=0){
-        image(Orch1,0,height,400,600)
+      if(timeElapsed<=15&&timeElapsed>=0){
+        image(Orch1,0,0,600,400)
       }
-      if(timeElapsed<=20&&timeElapsed>10){
-        image(Orch2,0,height,400,600)
-      }
-      if(timeElapsed>20){
-        image(Orch3,0,height,400,600)
+      if(timeElapsed<=30&&timeElapsed>15){
+        image(Orch2,0,0,600,400)
       }
       if(timeElapsed>30){
+        image(Orch3,0,0,600,400)
         win="yes"
       }
     }
     if(type=="Wisteria"){
-      if(timeElapsed<=40&&timeElapsed>=0){
-        image(Wist1,0,height,400,600)
+      if(timeElapsed<=60&&timeElapsed>=0){
+        image(Wist1,0,0,600,400)
       }
-      if(timeElapsed<=80&&timeElapsed>40){
-        image(Wist2,0,height,400,600)
+      if(timeElapsed<=120&&timeElapsed>60){
+        image(Wist2,0,0,600,400)
       }
-      if(timeElapsed>80){
-        image(Wist3,0,height,400,600)
+      if(timeElapsed>120){
+        image(Wist3,0,0,600,400)
         win="yes"
       }
     }
     if(type=="Snapdragon"){
-      if(timeElapsed<=100&&timeElapsed>=0){
-        image(Snap1,0,height,400,600)
+      if(timeElapsed<=150&&timeElapsed>=0){
+        image(Snap1,0,0,600,400)
       }
-      if(timeElapsed<=200&&timeElapsed>100){
-        image(Snap2,0,height,400,600)
+      if(timeElapsed<=300&&timeElapsed>150){
+        image(Snap2,0,0,600,400)
       }
-      if(timeElapsed>200){
-        image(Snap3,0,height,400,600)
+      if(timeElapsed>300){
+        image(Snap3,0,0,600,400)
         win="yes"
       }
     }
@@ -113,21 +128,34 @@ function growing(){
   rect(300,50,100,50)
   text("Done!",300,50,100,50)
       if(mouseIsPressed){
-        if(this.type=="Orchid"){
+        if(type=="Orchid"){
           score+=100
         }
-        if(this.type=="Orchid"){
+        if(type=="Wisteria"){
           score+=500
         }
-        if(this.type=="Snapdragon"){
+        if(type=="Snapdragon"){
           score+=1500
         }
-        //MOVE USER TO MEDIA PAGE
+        isHome=true
+        win="no"
+        type="NA"
+        timeElapsed=0
       }
     }
 }
 
 function home(){
-  
+  frameRate(20)
+  noFill()
+  image(HomePic,0,0,600,400)
+  fill(0)
+  rectMode(CORNER)
+  rect(mouseX-1000,mouseY+100,10000,10000)
+  rect(mouseX-1000,mouseY-100,10000,-10000)
+  rect(mouseX-100,mouseY-1000,-10000,10000)
+  rect(mouseX+100,mouseY-1000,10000,10000)
+  image(random(sparkle),mouseX-width/2,mouseY-height/2,600,400)
 }
+
 
