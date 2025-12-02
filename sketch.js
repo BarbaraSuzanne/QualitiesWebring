@@ -46,7 +46,6 @@ Ham6=loadImage("Images/Ham6.png")
 Bub=loadSound("Sounds/bub.mp3")
 Slap=loadSound("Sounds/slap.mp3")
 Wak=loadSound("Sounds/wak.mp3")
-SparlerSound=loadSound("Sounds/sparkle.mp3")
 }
 
 function setup() {
